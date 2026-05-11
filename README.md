@@ -23,7 +23,7 @@ Or go to [⚙️ Configuration](https://my.home-assistant.io/redirect/config) > 
 | --- | --- | --- | --- | --- | --- | --- |
 | Status | Sensor | User status that aligns with the VRChat website. | The same colored circle you see on the VRChat website that indicates the user's status. ||| ✔️ |
 | Status | Select | Same as above. Except it allows you to change your status. | Same as above. || ✔️ ||
-| Status description | Sensor | User-defined status text. This sensor will not be added if the user does not have a status description. If you want to change your status description in Home Assistant, use the [Update VRChat status action](#update-vrchat-status). ||| ✔️* | ✔️* |
+| Status description | Sensor | User-defined status text. This sensor will not be added if the user does not have a status description. If you want to change your status description in Home Assistant, use the [Update VRChat status action](#update-vrchat-status-vrchatupdate_user_status). ||| ✔️* | ✔️* |
 | In-game presence | Binary sensor | Shows whether the user is logged into the game client or not. ||| ✔️ | ✔️ |
 | Location | Sensor | Mostly aligns with the VRChat website. Except it also shows if the user is active on web/mobile or not when user is not in game. | If the user is in a non-private world, shows the world's thumbnail. | If the user is in a non-private world, shows the world's [details](https://vrchat.community/reference/get-world). | ✔️ | ✔️ |
 | (User) | Sensor | A sensor with the user's display name as its name, summarizing the above user status and in-game presence. Shows the user's status if the user is in game, and whether the user is active on web/mobile if not in game. | Shows the user's icon/pfp, with avatar image as fallback. | Shows the user's [info](https://vrchat.community/reference/get-user). *Additional attribute:* `friend_of`: ID of the account that have this friend. Useful when you have multiple accounts that have the same friends or are friends of each other. | ✔️ | ✔️ |
@@ -52,7 +52,7 @@ Use this action to update your VRChat status and status description.
 
 ### `vrchat_event`
 
-All [VRChat websocket event](https://vrchat.community/websocket) is forwarded to the [Home Assistant event bus](https://www.home-assistant.io/docs/automation/trigger/#event-trigger) with a few modifications:
+All [VRChat websocket events](https://vrchat.community/websocket) is forwarded to the [Home Assistant event bus](https://www.home-assistant.io/docs/automation/trigger/#event-trigger) with a few modifications:
 
 #### Added fields
 
