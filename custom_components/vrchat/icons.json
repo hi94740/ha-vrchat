@@ -1,0 +1,7 @@
+{
+  "services":{
+    "update_user_status": {
+      "service": "mdi:account-badge"
+    }
+  }
+}

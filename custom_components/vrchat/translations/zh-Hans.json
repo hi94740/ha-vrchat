@@ -1,0 +1,186 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "此 VRChat 账号已添加。",
+      "already_in_progress": "此 VRChat 账号的配置正在进行中。",
+      "reauth_successful": "重新认证成功。",
+      "reconfigure_successful": "重新配置成功。",
+      "unique_id_mismatch": "您刚才认证的 VRChat 账号用户 ID 与此配置条目的 ID 不匹配。请确保使用正确的账号，或将其作为新账号添加。"
+    },
+    "error": {
+      "unique_id_mismatch": "用户 ID 与此配置条目的 ID 不匹配。请重新配置并确保账号正确，或添加新条目。\n预期 ID：{expected_id}\n实际 ID：{got_id}"
+    },
+    "step": {
+      "choose_auth_method": {
+        "title": "认证您的 VRChat 账号",
+        "menu_options": {
+          "login": "登录",
+          "enter_cookies": "输入 Cookie"
+        },
+        "menu_option_descriptions": {
+          "login": "使用您的 VRChat 账号凭据",
+          "enter_cookies": "高级选项"
+        }
+      },
+      "login": {
+        "title": "登录",
+        "description": "**不支持**使用第三方账号登录。\n如果您只有平台账号（如 Steam），请参考[此教程](https://help.vrchat.com/hc/en-us/articles/360062659053-I-want-to-turn-my-platform-account-through-Steam-Meta-Pico-or-Viveport-into-a-VRChat-account)将其转换为 VRChat 账号。",
+        "data": {
+          "username": "用户名/电子邮箱",
+          "password": "密码"
+        },
+        "sections": {
+          "options": {
+            "name": "选项",
+            "data": {
+              "2fa_code_entity": "2FA 验证码实体",
+              "proxy": "代理"
+            },
+            "data_description": {
+              "2fa_code_entity": "一个提供最新 2FA 验证码的实体，用于自动验证。可以是 [OTP 传感器](https://www.home-assistant.io/integrations/otp/) 或是将验证码填入 [文本输入框 (Input text)](https://www.home-assistant.io/integrations/input_text/) 的自定义方案。\n**不适用于**邮件 2FA。"
+            }
+          }
+        }
+      },
+      "email_2fa": {
+        "title": "输入 2FA 验证码",
+        "description": "请检查您的邮箱以获取 2FA 验证码。",
+        "data": {
+          "email_2fa_code": "2FA 验证码"
+        }
+      },
+      "2fa": {
+        "title": "输入 2FA 验证码",
+        "description": "请输入身份验证器应用生成的验证码。",
+        "data": {
+          "2fa_code": "2FA 验证码"
+        }
+      },
+      "enter_cookies": {
+        "title": "输入 Cookie",
+        "sections": {
+          "options": {
+            "name": "选项",
+            "data": {
+              "proxy": "代理"
+            }
+          }
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "unique_id_mismatch": "用户 ID 与此配置条目的 ID 不匹配。请重新配置并确保账号正确，或添加新条目。\n预期 ID：{expected_id}\n实际 ID：{got_id}"
+  },
+  "selector": {
+    "select_2fa_mode": {
+      "choices": {
+        "manual": "手动",
+        "auto": "自动"
+      }
+    },
+    "user_status": {
+      "options": {
+        "join me": "🔵 欢迎加入",
+        "active": "🟢 在线",
+        "ask me": "🟠 忙碌",
+        "busy": "🔴 请勿打扰"
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "is_in_game": {
+        "name": "游戏在线状态",
+        "state": {
+          "on": "在线",
+          "off": "离线"
+        }
+      }
+    },
+    "sensor": {
+      "state": {
+        "state": {
+          "join me": "🔵 欢迎加入",
+          "active": "🟢 在线",
+          "ask me": "🟠 忙碌",
+          "busy": "🔴 请勿打扰",
+          "offline": "离线",
+          "active on web": "🌐 网页端在线",
+          "active on mobile": "📱 移动端在线",
+          "active on web or mobile": "📱 网页/移动端"
+        }
+      },
+      "status": {
+        "name": "状态",
+        "state": {
+          "join me": "🔵 欢迎加入",
+          "active": "🟢 在线",
+          "ask me": "🟠 忙碌",
+          "busy": "🔴 请勿打扰",
+          "offline": "离线"
+        }
+      },
+      "statusDescription": {
+        "name": "状态描述"
+      },
+      "location": {
+        "name": "位置",
+        "state": {
+          "traveling": "跳转中",
+          "private": "私密",
+          "offline": "离线",
+          "active on web or mobile": "📱 网页/移动端"
+        }
+      },
+      "platform": {
+        "name": "平台",
+        "state": {
+          "standalonewindows": "PC",
+          "web": "网页",
+          "android": "Android",
+          "ios": "iOS",
+          "nativemobile": "移动端",
+          "offline": "离线"
+        }
+      }
+    },
+    "select": {
+      "status_select": {
+        "name": "状态",
+        "state": {
+          "join me": "🔵 欢迎加入",
+          "active": "🟢 在线",
+          "ask me": "🟠 忙碌",
+          "busy": "🔴 请勿打扰",
+          "offline": "离线"
+        }
+      }
+    },
+    "image": {
+      "currentAvatarImage": {
+        "name": "当前虚拟形象"
+      },
+      "locationImage": {
+        "name": "当前位置图片"
+      }
+    }
+  },
+  "services": {
+    "update_user_status": {
+      "name": "更新 VRChat 状态",
+      "fields": {
+        "config_entry_id": {
+          "name": "账号"
+        },
+        "status": {
+          "name": "状态"
+        },
+        "status_description": {
+          "name": "状态描述",
+          "description": "输入空格可清空状态描述"
+        }
+      }
+    }
+  }
+}

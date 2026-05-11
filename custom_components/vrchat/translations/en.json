@@ -1,0 +1,186 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "This VRChat account is already added.",
+      "already_in_progress": "This VRChat account is already in the progress of being added.",
+      "reauth_successful": "Successfully authenticated.",
+      "reconfigure_successful": "Successfully authenticated.",
+      "unique_id_mismatch": "The user ID of the VRChat account you just authenticated does not match the ID of this config entry. Please make sure you are using the correct account or add as a new account instead."
+    },
+    "error": {
+      "unique_id_mismatch": "User ID does not match the ID of this config entry. Please reconfigure and make sure the account is correct or add a new entry instead.\nExpected ID: {expected_id}\nGot ID: {got_id}"
+    },
+    "step": {
+      "choose_auth_method": {
+        "title": "Authenticate your VRChat account",
+        "menu_options": {
+          "login": "Log in",
+          "enter_cookies": "Enter cookies"
+        },
+        "menu_option_descriptions": {
+          "login": "Using your VRChat account credentials",
+          "enter_cookies": "Advanced"
+        }
+      },
+      "login": {
+        "title": "Log in",
+        "description": "Log in with third-party account is **NOT** supported. \nIf you only have a platform account (eg. Steam), check out [this guide](https://help.vrchat.com/hc/en-us/articles/360062659053-I-want-to-turn-my-platform-account-through-Steam-Meta-Pico-or-Viveport-into-a-VRChat-account).",
+        "data": {
+          "username": "Username/Email",
+          "password": "Password"
+        },
+        "sections": {
+          "options": {
+            "name": "Options",
+            "data": {
+              "2fa_code_entity": "2FA code entity",
+              "proxy": "Proxy"
+            },
+            "data_description": {
+              "2fa_code_entity": "An entity that holds the latest 2FA code, so you don't have to enter it manually. Can be an [OTP sensor](https://www.home-assistant.io/integrations/otp/) or a custom solution that puts the code in an [Input text](https://www.home-assistant.io/integrations/input_text/).\nDoes **NOT** work for email 2FA."
+            }
+          }
+        }
+      },
+      "email_2fa": {
+        "title": "Enter 2FA code",
+        "description": "Check your email for 2FA code.",
+        "data": {
+          "email_2fa_code": "2FA code"
+        }
+      },
+      "2fa": {
+        "title": "Enter 2FA code",
+        "description": "Enter code from your authenticator app.",
+        "data": {
+          "2fa_code": "2FA code"
+        }
+      },
+      "enter_cookies": {
+        "title": "Enter cookies",
+        "sections": {
+          "options": {
+            "name": "Options",
+            "data": {
+              "proxy": "Proxy"
+            }
+          }
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "unique_id_mismatch": "User ID does not match the ID of this config entry. Please reconfigure and make sure the account is correct or add a new entry instead.\nExpected ID: {expected_id}\nGot ID: {got_id}"
+  },
+  "selector": {
+    "select_2fa_mode": {
+      "choices": {
+        "manual": "Manual",
+        "auto": "Auto"
+      }
+    },
+    "user_status": {
+      "options": {
+        "join me": "🔵 Join me",
+        "active": "🟢 Online",
+        "ask me": "🟠 Ask me",
+        "busy": "🔴 Busy"
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "is_in_game": {
+        "name": "In-game presence",
+        "state": {
+          "on": "Online",
+          "off": "Offline"
+        }
+      }
+    },
+    "sensor": {
+      "state": {
+        "state": {
+          "join me": "🔵 Join me",
+          "active": "🟢 Online",
+          "ask me": "🟠 Ask me",
+          "busy": "🔴 Busy",
+          "offline": "Offline",
+          "active on web": "🌐 Active on Web",
+          "active on mobile": "📱 Active on Mobile",
+          "active on web or mobile": "📱 Web/Mobile"
+        }
+      },
+      "status": {
+        "name": "Status",
+        "state": {
+          "join me": "🔵 Join me",
+          "active": "🟢 Online",
+          "ask me": "🟠 Ask me",
+          "busy": "🔴 Busy",
+          "offline": "Offline"
+        }
+      },
+      "statusDescription": {
+        "name": "Status description"
+      },
+      "location": {
+        "name": "Location",
+        "state": {
+          "traveling": "Traveling",
+          "private": "Private",
+          "offline": "Offline",
+          "active on web or mobile": "📱 Web/Mobile"
+        }
+      },
+      "platform": {
+        "name": "Platform",
+        "state": {
+          "standalonewindows": "PC",
+          "web": "Web",
+          "android": "Android",
+          "ios": "iOS",
+          "nativemobile": "Mobile",
+          "offline": "Offline"
+        }
+      }
+    },
+    "select": {
+      "status_select": {
+        "name": "Status",
+        "state": {
+          "join me": "🔵 Join me",
+          "active": "🟢 Online",
+          "ask me": "🟠 Ask me",
+          "busy": "🔴 Busy",
+          "offline": "Offline"
+        }
+      }
+    },
+    "image": {
+      "currentAvatarImage": {
+        "name": "Avatar image"
+      },
+      "locationImage": {
+        "name": "Location image"
+      }
+    }
+  },
+  "services": {
+    "update_user_status": {
+      "name": "Update VRChat status",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account"
+        },
+        "status": {
+          "name": "Status"
+        },
+        "status_description": {
+          "name": "Status description",
+          "description": "Enter space to clear status description."
+        }
+      }
+    }
+  }
+}

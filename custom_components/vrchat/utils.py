@@ -1,0 +1,115 @@
+"""Utils for the VRChat integration."""
+
+import asyncio
+import base64
+from collections.abc import Callable
+from enum import StrEnum
+from functools import cached_property
+import inspect
+import logging
+from typing import Final
+
+_LOGGER = logging.getLogger(__name__)
+
+
+def process_vrchat_string(s: str | None = None):
+    """Proccess string value returned by the VRChat API. Treat empty string as None."""
+    return None if s is None or len(s) <= 0 else s
+
+
+def svg_file_uri(svg: str):
+    """Turn svg string into file uri."""
+    return f"data:image/svg+xml;charset=utf-8;base64,{base64.b64encode(svg.encode()).decode('ascii')}"
+
+
+class VRChatSpecialLocationString(StrEnum):
+    """VRChat special location string."""
+
+    TRAVELING = "traveling"
+    PRIVATE = "private"
+    OFFLINE = "offline"
+
+
+VRCHAT_SPECIAL_LOCATION_STRINGS = set(VRChatSpecialLocationString)
+VRCHAT_LOCATION_STRING_DELIMITER: Final = ":"
+VRCHAT_WORLD_ID_PREFIX: Final = "wrld_"
+
+
+def parse_vrchat_location_string(s: str | None = None):
+    """Proccess VRChat location string."""
+    worldId: str | None = None
+    instanceId: str | None = None
+    s = process_vrchat_string(s)
+    if s is not None:
+        for ss in VRCHAT_SPECIAL_LOCATION_STRINGS:
+            if s.startswith(ss):
+                worldId = ss
+                instanceId = ss
+        if worldId is None:
+            if VRCHAT_LOCATION_STRING_DELIMITER in s:
+                worldId, instanceId = s.split(VRCHAT_LOCATION_STRING_DELIMITER, 1)
+            elif s.startswith(VRCHAT_WORLD_ID_PREFIX):
+                worldId = s
+            else:
+                instanceId = s
+    return worldId, instanceId
+
+
+EXCEPTION_MESSAGE_ASYNC_CLEANUP: Final = "Error during async clean up."
+
+
+class AsyncCleanups:
+    """Handle async cleanup callbacks."""
+
+    @cached_property
+    def _cleanups(self) -> list[Callable]:
+        return []
+
+    @property
+    def _closed(self):
+        return getattr(self, "__closed", False)
+
+    @_closed.setter
+    def _closed(self, new_value):
+        self.__closed = new_value
+
+    @property
+    def closed(self):
+        """True if object is already closed."""
+        return self._closed
+
+    def add_to_cleanups(self, callback: Callable):
+        """Add a cleanup callback to be executed on closing/exiting."""
+        self._cleanups.insert(0, callback)
+
+    def remove_from_cleanups(self, callback: Callable):
+        """Remove a cleanup callback."""
+        if callback in self._cleanups:
+            self._cleanups.remove(callback)
+
+    async def close(self):
+        """Close."""
+        if self.closed:
+            return
+        self._closed = True
+        try:
+            async with asyncio.TaskGroup() as tg:
+                for c in self._cleanups:
+                    try:
+                        res = c()
+                    except Exception:
+                        res = None
+                        _LOGGER.exception(EXCEPTION_MESSAGE_ASYNC_CLEANUP)
+
+                    if inspect.isawaitable(res):
+                        tg.create_task(asyncio.wait_for(asyncio.shield(res), None))
+        except Exception:
+            _LOGGER.exception(EXCEPTION_MESSAGE_ASYNC_CLEANUP)
+
+    async def __aenter__(self):
+        """Return self."""
+        return self
+
+    async def __aexit__(self, exc_type, exc, tb):
+        """Close."""
+        await self.close()

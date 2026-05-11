@@ -1,0 +1,19 @@
+update_user_status:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: vrchat
+    status:
+      selector:
+        select:
+          translation_key: "user_status"
+          options:
+            - "join me"
+            - "active"
+            - "ask me"
+            - "busy"
+    status_description:
+      selector:
+        text:

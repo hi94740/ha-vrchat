@@ -1,0 +1,151 @@
+"""Constants for the VRChat integration."""
+
+from enum import StrEnum
+from typing import Final
+
+from .utils import (
+    VRChatSpecialLocationString,
+    svg_file_uri,
+    VRCHAT_SPECIAL_LOCATION_STRINGS,
+)
+
+DOMAIN = "vrchat"
+
+RETRY_DELAY_SECOND: Final = 60
+RESTART_DUE_TO_AUTH_ERROR_BACKOFFS: Final = [0, 60, 300, 600, 1800, 3600]
+WEBSOCKET_INACTIVE_TIMEOUT_SECOND: Final = 600
+
+CONF_PROXY: Final = "proxy"
+CONF_2FA_CODE: Final = "2fa_code"
+CONF_2FA_CODE_ENTITY: Final = "2fa_code_entity"
+CONF_EMAIL_2FA_CODE: Final = "email_2fa_code"
+CONF_COOKIE_AUTH: Final = "auth"
+CONF_COOKIE_2FA: Final = "twoFactorAuth"
+
+USER_AGENT: Final = "HomeAssistant/0.0.1 hi94740@qq.com"
+
+VRCHAT_API_HOST: Final = "api.vrchat.cloud"
+VRCHAT_USER_PAGE_BASE_URL: Final = "https://vrchat.com/home/user/"
+VRCHAT_WEBSOCKET_URL: Final = "wss://pipeline.vrchat.cloud"
+
+
+class VRChatWebsocketEventType(StrEnum):
+    """VRChat websocket event type enum."""
+
+    FRIEND_DELETE = "friend-delete"
+    FRIEND_OFFLINE = "friend-offline"
+    FRIEND_ACTIVE = "friend-active"
+
+    USER_UPDATE = "user-update"
+
+
+class VRChatUserState(StrEnum):
+    """VRChat user state enum."""
+
+    JOIN_ME = "join me"
+    ACTIVE = "active"
+    ASK_ME = "ask me"
+    BUSY = "busy"
+    OFFLINE = "offline"
+    # ACTIVE_ON_WEB = "active on web"
+    # ACTIVE_ON_MOBILE = "active on mobile"
+    ACTIVE_ON_WEB_OR_MOBILE = "active on web or mobile"
+
+
+VRCHAT_USER_STATUS_ICON_MAP = {
+    VRChatUserState.JOIN_ME: "mdi:account-arrow-left",
+    VRChatUserState.ACTIVE: "mdi:account-badge",
+    VRChatUserState.ASK_ME: "mdi:account-card",
+    VRChatUserState.BUSY: "mdi:account-cancel",
+    VRChatUserState.OFFLINE: "mdi:account-outline",
+}
+
+VRCHAT_USER_STATUS_OPTIONS = list(VRCHAT_USER_STATUS_ICON_MAP.keys())
+
+VRCHAT_USER_STATE_ICON_MAP = {
+    **VRCHAT_USER_STATUS_ICON_MAP,
+    # VRChatUserState.ACTIVE_ON_WEB: "mdi:account-badge-outline",
+    # VRChatUserState.ACTIVE_ON_MOBILE: "mdi:account-badge-outline",
+    VRChatUserState.ACTIVE_ON_WEB_OR_MOBILE: "mdi:account-badge-outline",
+}
+
+VRCHAT_USER_STATE_OPTIONS = list(VRCHAT_USER_STATE_ICON_MAP.keys())
+
+VRCHAT_USER_STATUS_COLOR_MAP = {
+    VRChatUserState.JOIN_ME: "#42caff",
+    VRChatUserState.ACTIVE: "#51e57e",
+    VRChatUserState.ASK_ME: "#e88134",
+    VRChatUserState.BUSY: "#5b0b0b",
+    VRChatUserState.OFFLINE: "#737f8d",
+}
+
+_USER_STATUS_INDICATOR_DIAMETER = 15
+_USER_STATUS_INDICATOR_RADIUS = _USER_STATUS_INDICATOR_DIAMETER / 2
+_USER_STATUS_INDICATOR_STROKE_WIDTH = 3
+_USER_STATUS_INDICATOR_CANVAS_SIZE = 30
+_USER_STATUS_INDICATOR_CENTER = _USER_STATUS_INDICATOR_CANVAS_SIZE / 2
+
+
+def _user_status_indicator_in_game(color: str):
+    """User status indicator when in game."""
+    return f'''<svg width="{_USER_STATUS_INDICATOR_CANVAS_SIZE}" height="{_USER_STATUS_INDICATOR_CANVAS_SIZE}" viewBox="0 0 {_USER_STATUS_INDICATOR_CANVAS_SIZE} {_USER_STATUS_INDICATOR_CANVAS_SIZE}" xmlns="http://www.w3.org/2000/svg">
+          <circle
+            cx="{_USER_STATUS_INDICATOR_CENTER}"
+            cy="{_USER_STATUS_INDICATOR_CENTER}"
+            r="{_USER_STATUS_INDICATOR_RADIUS}"
+            fill="{color}"
+            stroke="none"
+          />
+        </svg>
+        '''
+
+
+def _user_status_indicator_not_in_game(color: str):
+    """User status indicator when not in game."""
+    return f'''<svg width="{_USER_STATUS_INDICATOR_CANVAS_SIZE}" height="{_USER_STATUS_INDICATOR_CANVAS_SIZE}" viewBox="0 0 {_USER_STATUS_INDICATOR_CANVAS_SIZE} {_USER_STATUS_INDICATOR_CANVAS_SIZE}" xmlns="http://www.w3.org/2000/svg">
+          <circle
+            cx="{_USER_STATUS_INDICATOR_CENTER}"
+            cy="{_USER_STATUS_INDICATOR_CENTER}"
+            r="{_USER_STATUS_INDICATOR_RADIUS - _USER_STATUS_INDICATOR_STROKE_WIDTH / 2}"
+            fill="none"
+            stroke="{color}"
+            stroke-width="{_USER_STATUS_INDICATOR_STROKE_WIDTH}"
+          />
+        </svg>
+        '''
+
+
+VRCHAT_USER_STATUS_INDICATOR_MAP_IN_GAME = {
+    status: svg_file_uri(_user_status_indicator_in_game(color))
+    for status, color in VRCHAT_USER_STATUS_COLOR_MAP.items()
+}
+
+VRCHAT_USER_STATUS_INDICATOR_MAP_NOT_IN_GAME = {
+    status: svg_file_uri(_user_status_indicator_not_in_game(color))
+    for status, color in VRCHAT_USER_STATUS_COLOR_MAP.items()
+}
+
+VRCHAT_USER_LOCATION_ICON_MAP = {
+    VRChatSpecialLocationString.TRAVELING: "mdi:map-marker-distance",
+    VRChatSpecialLocationString.PRIVATE: "mdi:map-marker-outline",
+    VRChatSpecialLocationString.OFFLINE: "mdi:map-marker-off-outline",
+    VRChatUserState.ACTIVE_ON_WEB_OR_MOBILE: "mdi:cellphone-marker",
+    None: "mdi:map-marker-question-outline",
+}
+
+
+class VRChatUserPlatform(StrEnum):
+    """VRChat user platform enum."""
+
+    STANDALONE_WINDOWS = "standalonewindows"
+    WEB = "web"
+    ANDROID = "android"
+    IOS = "ios"
+    NATIVE_MOBILE = "nativemobile"
+
+
+VRChatUserPlatformMobile: Final = {
+    VRChatUserPlatform.ANDROID,
+    VRChatUserPlatform.IOS,
+    VRChatUserPlatform.NATIVE_MOBILE,
+}
